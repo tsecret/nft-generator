@@ -28,6 +28,10 @@ const updateDocument = async (docID: string, data: object) => {
     return await db.doc(docID).update(data);
 }
 
+const getDocument = async(docID: string) => {
+    return await db.doc(docID).get();
+}
+
 const getMyNFTs = async (address: string) => {
     return await db.where("owner", "==", address).get()
 }
@@ -43,6 +47,7 @@ export default {
     addDocument,
     removeDocument,
     updateDocument,
+    getDocument,
     getMyNFTs,
     getAllNFT
 }

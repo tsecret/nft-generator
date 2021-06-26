@@ -67,7 +67,7 @@ body {
 .container{
     padding: 10px;
     margin: 20px;
-    max-width: 500px;
+    width: 400px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -113,6 +113,7 @@ body {
 }
 
 .nft-card{
+    cursor: pointer;
     justify-content: space-between;
     margin: 20px;
     box-shadow: 2px 2px 50px 0px rgba(0,0,0,0.76);

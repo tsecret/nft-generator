@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-d
 
 
 
-import { GenerateNFT, MarketPlace, MyNFTs } from './pages'; 
+import { GenerateNFT, MarketPlace, MyNFTs, NFT } from './pages'; 
 
 
 
@@ -15,6 +15,7 @@ const App = () => {
           <Route exact path="/generate" component={GenerateNFT} />
           <Route exact path="/marketplace" component={MarketPlace} />
           <Route exact path="/mynfts" component={MyNFTs} />
+          <Route exact path="/nft/:id" component={NFT} />
         </Switch>
   </Router>
 }

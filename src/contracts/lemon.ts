@@ -38,7 +38,7 @@ export class Lemon {
 		return await this.contract.methods.totalSupply().call();
 	}
 
-	async price(tokenID: number) {
+	async price(tokenID: string) {
 		return await this.contract.methods.price(tokenID).call();
 	}
 
@@ -66,11 +66,10 @@ export class Lemon {
 	}
 
 
-	async buy(tokenID:number, sender: string, callback: any) {
-		// let weiAmount: any = new BigNumber(price).times(18);
-		let price: any = await this.price(tokenID);
-		var gasPrice = await this.gasPrice();
-		var tx = this.contract.methods.buy(tokenID);
+	async buy(tokenID:string, sender: string, callback: any) {
+		const price: any = await this.price(tokenID);
+		const gasPrice = await this.gasPrice();
+		const tx = this.contract.methods.buy(tokenID);
 		let gasLimit = 150000;
 		try {
 			gasLimit = await tx.estimateGas({ value: 0, from: sender, to: this.address });

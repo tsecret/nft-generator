@@ -44,9 +44,10 @@ export const GenerateNFT = () => {
 
         const imageID: string = nanoid();
         const url: string = await firebase.uploadImage(file, imageID)
-        .then((imageURL: string) => imageURL);
+        .then((imageURL: string) => { setImageURL(imageURL); return imageURL });
+        
 
-        const docID: string|void = await firebase.addDocument({ ...info, url: url, owner: localStorage.wallet })
+        const docID: string|void = await firebase.addDocument({ ...info, url: url, owner: localStorage.wallet, creator: localStorage.wallet })
         .then((doc: any) => doc.id)
         .catch((error: any) => { console.log(error); setGenerating(false) })
 
@@ -62,7 +63,7 @@ export const GenerateNFT = () => {
             })
         })
 
-        await firebase.updateDocument(docID, { txHash, id: NFTID })
+        await firebase.updateDocument(docID, { txHash, id: NFTID, docID })
         .then(() => { setGenerating(false); setGenerated(true) })
         .catch((error: any) => { console.log(error); setGenerating(false) })
     }
@@ -97,10 +98,7 @@ export const GenerateNFT = () => {
                     <Input name="name" onChange={onTextChange} placeholder="NFT name" className="input" />
                     <Input.TextArea name="description" onChange={onTextChange} placeholder="Description" className="input" />
 
-                    <div className="row inputs">
-                        <Input name="amount" onChange={onTextChange} placeholder="Amount" className="input input-short" />
-                        <Input name="price" onChange={onTextChange} placeholder="Price" className="input input-short" />  
-                    </div>
+                    <Input name="price" onChange={onTextChange} placeholder="Price" className="input" />  
 
                     <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.amount && info.price)} className="button button-generate">Generate</Button>
                 </div>
