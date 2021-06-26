@@ -21,8 +21,6 @@ export const Header = () => {
 
     React.useEffect(() => {
         checkAccounts()
-
-        return () => { console.log("leaving") }
     }, [])
 
     return (
@@ -34,7 +32,7 @@ export const Header = () => {
             <a className="link" href="/generate">Generate NFT</a>
 
             {wallet? 
-            <span className="wallet-connected">Wallet connected ✅</span>
+            <span className="wallet-connected gradient">...{wallet.slice(wallet.length-10)}</span>
             :
             <Button className="" onClick={onConnectWallet}>Connect wallet</Button>
             }

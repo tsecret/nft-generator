@@ -3,7 +3,7 @@ import { NFTData } from '../types';
 
 import firebase from '../firebase';
 import utils from '../utils';
-import { Header, NFTCard } from '../components';
+import { Header, NFTCard, LoadingModal } from '../components';
 
 export const MyNFTs = () => {
     const [NFTs, setNFTs] = React.useState<NFTData[]>();
@@ -22,6 +22,7 @@ export const MyNFTs = () => {
     React.useEffect(() => {
         init()
     }, [])
+
 
     return (
         <div className="page">

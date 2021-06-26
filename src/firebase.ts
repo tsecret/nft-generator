@@ -18,9 +18,12 @@ const addDocument = async (collectionName: string, data: NFTData) => {
     return await firebase.firestore().collection(collectionName).doc(data.id).set(data)
 }
 
-
 const getMyNFTs = async (address: string) => {
     return await firebase.firestore().collection("NFTs").where("owner", "==", address).get()
+}
+
+const getAllNFT = async () => {
+    return await firebase.firestore().collection("NFTs").get()
 }
 
 export default {
@@ -28,5 +31,6 @@ export default {
     uploadImage,
     removeImage,
     addDocument,
-    getMyNFTs
+    getMyNFTs,
+    getAllNFT
 }
