@@ -89,3 +89,48 @@ body {
     border-radius: 8px;
     padding: 5px;
 }
+
+.error{
+    color: tomato;
+    margin: 20;
+    font-size: 18px;
+}
+
+.link{
+    color: black;
+}
+
+.link:hover{
+    color: black;
+}
+
+.nft-grid{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%; 
+}
+
+.nft-card{
+    margin: 20px;
+    box-shadow: 2px 2px 50px 0px rgba(0,0,0,0.76);
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.nft-card-image{
+    border-radius: 8px;
+    max-width: 250px;
+}
+
+.nft-card-name{
+    width: 100%;
+    font-weight: 600px;
+    font-size: 24px;
+}
+
+.nft-card-price{
+    width: 100%;
+    font-size: 18px;
+}

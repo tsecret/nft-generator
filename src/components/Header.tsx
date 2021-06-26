@@ -21,11 +21,17 @@ export const Header = () => {
 
     React.useEffect(() => {
         checkAccounts()
+
+        return () => { console.log("leaving") }
     }, [])
 
     return (
         <div className="row header-container">
-            <span className="logo">NFT-GENERATOR</span>
+            <a className="link logo" href="/">NFT-GENERATOR</a>
+
+            <a className="link" href="/marketplace">Market Place</a>
+            <a className="link" href="/mynfts">My Items</a>
+            <a className="link" href="/generate">Generate NFT</a>
 
             {wallet? 
             <span className="wallet-connected">Wallet connected ✅</span>
