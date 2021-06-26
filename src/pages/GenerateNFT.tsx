@@ -79,7 +79,7 @@ export const GenerateNFT = () => {
     //     Token.approveMax(localStorage.wallet, config.CONTRACT_ADDRESS, $);
     // }
 
-    
+
     const renderer = () => {
         if(generated){
             return <NFTGenerationResult status="success" url={imageURL} />
@@ -109,7 +109,7 @@ export const GenerateNFT = () => {
 
                     <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.price)} className="button button-generate">Generate</Button>
 
-                    <Button onClick={approve} className="button button-generate">Allow LEMON</Button>
+                   
 
                 </div>
             </>

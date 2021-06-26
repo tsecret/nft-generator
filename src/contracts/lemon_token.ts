@@ -1,8 +1,14 @@
 import Web3 from 'web3'
 import { toBN } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
+// import { BN } from 'web3-utils'
+import Lemon_token_Abi from './lemon_token.json';
 
-import Lemon_token from './lemon_token.json';
+
+export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
+export const ZERO_BYTES32 = '0x0000000000000000000000000000000000000000000000000000000000000000';
+// export const MAX_UINT256 = new BN('2').pow(new BN('256')).sub(new BN('1'));   //115792089237316195423570985008687907853269984665640564039457584007913129639935
+export const MAX_UINT256 = '157920892373161954235709850086879078532699846656405640394575840079';
 
 BigNumber.set({ DECIMAL_PLACES: 18 })
 
@@ -12,15 +18,13 @@ export class Lemon_token {
     contract: any;
     defaultGasPrice: number;
     currentWindow: any = window
-    LNFTABI: any = LNFT_ABI
+    Lemon_token_Abi: any = Lemon_token_Abi
     
-	constructor(address: string, symbol: string, decimals: number) {
+	constructor(address: string) {
 		this.web3 = new Web3(this.currentWindow.ethereum);
 		this.address = address;
-		this.contract = new this.web3.eth.Contract(this.Lemon_token, address);
+		this.contract = new this.web3.eth.Contract(this.Lemon_token_Abi, address);
 		this.defaultGasPrice = 20000000000;
-		this.decimals = decimals;
-		this.symbol = symbol;
 
 	}
 
@@ -40,10 +44,10 @@ export class Lemon_token {
 		return await this.contract.methods.totalSupply().call();
 	}
 
-	async balanceOf(user) {
-		let balance = await this.contract.methods.balanceOf(user).call();
-		return this.fromBN(balance);
-	}
+	// async balanceOf(user) {
+	// 	let balance = await this.contract.methods.balanceOf(user).call();
+	// 	return this.fromBN(balance);
+	// }
 	async balanceOf(sender: string) {
 		let balance =  await this.contract.methods.balanceOf(sender).call();
 		return this.fromBN(balance);
@@ -51,10 +55,10 @@ export class Lemon_token {
 	}
 
 	async getSymbol() {
-		return this.symbol || await this.contract.methods.symbol().call();
+		return await this.contract.methods.symbol().call();
 	}
 
-	async approveMax(sender:string, spender:string, callback) {
+	async approveMax(sender:string, spender:string, callback:any) {
 	  var gasPrice = await this.web3.eth.getGasPrice();
 	  var tx = this.contract.methods.approve(spender, MAX_UINT256);
 	  var gasLimit = await tx.estimateGas({ value: 0, from: sender, to: this.address });
