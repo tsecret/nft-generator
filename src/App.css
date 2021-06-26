@@ -3,7 +3,6 @@ body {
     font-family: 'Noto Sans', sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #555b7d;
 }
 
 .page{
@@ -14,6 +13,79 @@ body {
     align-items: center;
 }
 
+.row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
 .header{
     font-size: 32px;
+    font-weight: bold;
+}
+
+.upload, .ant-upload, .ant-upload-picture-card-wrapper, .ant-upload-list{
+    min-width: 100%;
+    min-height: 350px;
+}
+
+.input{
+    max-width: 100% !important;
+    border-radius: 8px !important;
+    box-shadow: 2px 2px 4px 1px rgba(0,0,0,0.25) !important;
+    margin: 10px 0px !important;
+}
+
+.input-short {
+    max-width: 45% !important;
+}
+
+.inputs {
+    justify-content: space-between;
+}
+
+.button{
+    width: 100%;
+    height: 40px;
+    border-radius: 8px !important;
+    margin: 20px;
+    box-shadow: 2px 2px 4px 1px rgba(0,0,0,0.25) !important;  
+}
+
+.button-generate, .button-generate:hover{
+    background-color: rgb(89, 105, 243);
+    color: white !important;
+}
+
+
+.button-generate:disabled{
+    background-color: gray !important;
+    opacity: 0.2;
+}
+
+.container{
+    padding: 10px;
+    margin: 20px;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header-container{
+    justify-content: space-between;
+    padding: 0px 20px;
+    margin-bottom: 50px;
+}
+
+.logo{
+    font-weight: bold;
+    font-size: 32px
+}
+
+.wallet-connected{
+    border: 1px solid gray;
+    border-radius: 8px;
+    padding: 5px;
 }
