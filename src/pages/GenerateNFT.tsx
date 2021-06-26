@@ -3,8 +3,10 @@ import React from 'react';
 import { Upload, Input, Button } from 'antd';
 import firebase from '../firebase';
 import { Header, LoadingModal, NFTGenerationResult } from '../components';
-import { nanoid } from 'nanoid'
-import Lemon_nft from '../contracts/lemon_nft'
+import { BigNumber } from 'bignumber.js';
+import { toBN } from 'web3-utils';
+import { nanoid } from 'nanoid';
+import Lemon_nft from '../contracts/lemon_nft';
 
 export const GenerateNFT = () => {
 
@@ -21,6 +23,7 @@ export const GenerateNFT = () => {
         setUploading(true);
         const { onSuccess, onError, file } = options;
         try {
+
             const imageID: string = nanoid();
             await firebase.uploadImage(file, imageID)
             .then((imageURL: string) => { setImageURL(imageURL); setImageID(imageID) })
@@ -54,8 +57,20 @@ export const GenerateNFT = () => {
         .catch((error: any) => { console.error(error) })
     }
     const MINTING = async () => {
-        Contract.mint('test.html//png.kz', localStorage.wallet, 2, ()=>{console.log("ok")});
-    }
+        let price_nft = await Contract.price(2);
+        console.log(price_nft);
+        Contract.mint('test.html//png.kz', localStorage.wallet, 4, ()=>{console.log("ok")});
+   } 
+
+   const buy = async () => {
+        Contract.buy(3, localStorage.wallet, ()=>{console.log("ok")});
+   } 
+   const price_nft = async () => {
+        let new_price = new BigNumber(2).times(18);
+        console.log(toBN(1));
+        //Contract.update_price(3, localStorage.wallet, 0.5, ()=>{console.log("ok")});;
+        let price_nft = await Contract.price(4);
+        console.log('nft price ', price_nft);} 
 
     const renderer = () => {
         if(generated){
@@ -90,6 +105,8 @@ export const GenerateNFT = () => {
 
                     <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.amount && info.price)} className="button button-generate">Generate</Button>
                     <Button onClick={MINTING}  className="button button-generate">Minting</Button>
+                    <Button onClick={price_nft}  className="button button-generate">price</Button>
+                    <Button onClick={buy}  className="button button-generate">buuy</Button>
                 </div>
             </>
         }
