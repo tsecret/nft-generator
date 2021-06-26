@@ -5,7 +5,9 @@ import firebase from '../firebase';
 import { Header, LoadingModal, NFTGenerationResult } from '../components';
 import { nanoid } from 'nanoid'
 import utils from '../utils';
-import Lemon_nft from '../contracts/lemon_nft'
+import config from '../config';
+
+import Lemon from '../contracts/lemon';
 
 export const GenerateNFT = () => {
 
@@ -14,25 +16,9 @@ export const GenerateNFT = () => {
     const [imageURL, setImageURL] = React.useState<string>();
     const [info, setInfo] = React.useState<any>();
     const [generated, setGenerated] = React.useState<boolean>(false);
-  const [file, setFile] = React.useState<any>();
+    const [file, setFile] = React.useState<any>();
     
-  const Contract = new Lemon_nft('0x98a682fE1B3967eFe70834dABf1E67527a993F5C');
-
-    const onUpload = async (options: any) => {
-        setUploading(true);
-        const { onSuccess, onError, file } = options;
-        try {
-            const imageID: string = nanoid();
-            await firebase.uploadImage(file, imageID)
-            .then((imageURL: string) => { setImageURL(imageURL); setImageID(imageID) })
-            
-            onSuccess(file);
-        } catch (err) {
-            onError(err)
-        }
-        setUploading(false);
-    };
-    
+    const Contract = new Lemon(config.CONTRACT_ADDRESS);
 
     const beforeUpload = (file:any) => {
         setFile(file);
@@ -62,8 +48,9 @@ export const GenerateNFT = () => {
         .catch((error: any) => { console.log(error); setGenerating(false) })
     }
 
-     const MINTING = async () => {
-        Contract.mint('test.html//png.kz', localStorage.wallet, 2, ()=>{console.log("ok")});
+    const onMint = async () => {
+        if(!localStorage.wallet) return;
+        Contract.mint('test.html//png.kz', localStorage.wallet, 0.2, ()=>{console.log("ok")});
     }
     
     const renderer = () => {
@@ -97,7 +84,7 @@ export const GenerateNFT = () => {
                     </div>
 
                     <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.amount && info.price)} className="button button-generate">Generate</Button>
-                    <Button onClick={MINTING}  className="button button-generate">Minting</Button>
+                    <Button onClick={onMint}  className="button button-generate">Minting</Button>
                 </div>
             </>
         }

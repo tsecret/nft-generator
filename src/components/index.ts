@@ -7,5 +7,5 @@ export {
     Header,
     LoadingModal,
     NFTGenerationResult,
-    NFTCard
+    NFTCard,
 }

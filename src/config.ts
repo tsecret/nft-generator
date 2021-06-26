@@ -6,5 +6,6 @@ export default {
         storageBucket: "nft-generator.appspot.com",
         messagingSenderId: "36882130502",
         appId: "1:36882130502:web:1302383947bd623e9c8c47"
-    }
+    },
+    CONTRACT_ADDRESS: "0x98a682fE1B3967eFe70834dABf1E67527a993F5C"
 }

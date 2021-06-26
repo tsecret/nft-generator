@@ -2,11 +2,11 @@ import Web3 from 'web3'
 import { toBN } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 
-import LNFT_ABI from './lemon_nft.json';
+import LNFT_ABI from './lemon.json';
 
 BigNumber.set({ DECIMAL_PLACES: 18 })
 
-export class Lemon_nft {
+export class Lemon {
     web3: Web3;
     address: string;
     contract: any;
@@ -19,7 +19,6 @@ export class Lemon_nft {
 		this.address = address;
 		this.contract = new this.web3.eth.Contract(this.LNFTABI, address);
 		this.defaultGasPrice = 20000000000;
-
 	}
 
 	fromBN(amount: any){
@@ -30,20 +29,15 @@ export class Lemon_nft {
 		this.web3.setProvider(provider)
 	}
 
-
-
-
-
 	async gasPrice() {
 		return await this.web3.eth.getGasPrice() || this.defaultGasPrice;
 	}
 
-
-
-
 	async mint(tokenURI: string, sender: string, price: number , callback: any) {
-		let weiAmount: any = new BigNumber(price).times(18);
+		const prec: any = new BigNumber(10).pow(new BigNumber(18));
+		let weiAmount: any = new BigNumber(price).times(prec);
 		var gasPrice = await this.gasPrice();
+		console.log(weiAmount);
 		var tx = this.contract.methods.mint(tokenURI,sender,toBN(weiAmount));
 		let gasLimit = 150000;
 		try {
@@ -63,4 +57,4 @@ export class Lemon_nft {
 
 }
 
-export default Lemon_nft;
+export default Lemon;
