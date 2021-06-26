@@ -18,7 +18,7 @@ export const GenerateNFT = () => {
     const [generated, setGenerated] = React.useState<boolean>(false);
     const [file, setFile] = React.useState<any>();
     
-    const Contract = new Lemon(config.CONTRACT_ADDRESS);
+    const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS));
 
     const beforeUpload = (file:any) => {
         setFile(file);
@@ -43,14 +43,22 @@ export const GenerateNFT = () => {
         const url: string = await firebase.uploadImage(file, imageID)
         .then((imageURL: string) => imageURL);
 
-        await firebase.addDocument("NFTs", { ...info, url: url, owner: localStorage.wallet })
+        const { txHash, NFTID }: any = await new Promise((resolve, reject) => {
+            contract.mint(url, localStorage.wallet, info.price, function(err: any, txHash: string, NFTID: number) {
+                if(err) { onFailure(); setError("Error with minting"); reject() }
+                resolve({txHash, NFTID});
+            })
+        })
+        
+        await firebase.addDocument("NFTs", { ...info, url: url, owner: localStorage.wallet, txHash, id: NFTID })
         .then((res: any) => { setGenerating(false); setGenerated(true) })
         .catch((error: any) => { console.log(error); setGenerating(false) })
+
+
     }
 
-    const onMint = async () => {
-        if(!localStorage.wallet) return;
-        Contract.mint('test.html//png.kz', localStorage.wallet, 0.2, ()=>{console.log("ok")});
+    const onFailure = async () => {
+
     }
     
     const renderer = () => {
@@ -84,7 +92,6 @@ export const GenerateNFT = () => {
                     </div>
 
                     <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.amount && info.price)} className="button button-generate">Generate</Button>
-                    <Button onClick={onMint}  className="button button-generate">Minting</Button>
                 </div>
             </>
         }
