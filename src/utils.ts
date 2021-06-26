@@ -10,7 +10,12 @@ const getBase64 = (img: any, callback: any) => {
     reader.readAsDataURL(img);
 }
 
+const stripAddress = (address: string): string => {
+    return address.slice(0, 5) + "..." + address.slice(address.length-5);
+}
+
 export default {
     getDocsFromSnapshot,
-    getBase64
+    getBase64,
+    stripAddress
 }

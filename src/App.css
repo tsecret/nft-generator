@@ -30,6 +30,27 @@ body {
     min-height: 350px;
 }
 
+.ant-upload.ant-upload-select-picture-card, .ant-upload.ant-upload-select-picture-card:hover{
+    --borderWidth: 3px;
+    position: relative;
+    border-radius: var(--borderWidth);
+}
+
+.ant-upload.ant-upload-select-picture-card:after{
+    content: '';
+    position: absolute;
+    top: calc(-1 * var(--borderWidth));
+    left: calc(-1 * var(--borderWidth));
+    height: calc(100% + var(--borderWidth) * 2);
+    width: calc(100% + var(--borderWidth) * 2);
+    background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+    border-radius: calc(2 * var(--borderWidth));
+    z-index: -1;
+    animation: animatedgradient 3s ease alternate infinite;
+    background-size: 300% 300%;
+}
+
+
 .input{
     max-width: 100% !important;
     border-radius: 8px !important;
@@ -49,7 +70,7 @@ body {
     width: 100%;
     height: 40px;
     border-radius: 8px !important;
-    margin: 20px;
+    margin: 20px 0px;
     box-shadow: 2px 2px 4px 1px rgba(0,0,0,0.25) !important;  
 }
 
@@ -119,6 +140,11 @@ body {
     box-shadow: 2px 2px 50px 0px rgba(0,0,0,0.76);
     padding: 10px;
     border-radius: 8px;
+    max-width: 300px;
+}
+
+.nft-card-big{
+    max-width: 500px;
 }
 
 .nft-card:hover{
@@ -127,13 +153,24 @@ body {
 
 .nft-card-image{
     border-radius: 8px;
-    max-width: 250px;
+    width: 100%;
 }
 
 .nft-card-name{
     width: 100%;
-    font-weight: 600px;
+    font-weight: 600;
     font-size: 24px;
+    margin: 10px 0px;
+}
+
+.nft-card-name-big{
+    font-size: 24px;
+}
+
+.nft-card-description{
+    width: 100%;
+    font-size: 18px;
+    color: gray;
 }
 
 .nft-card-price{
@@ -157,6 +194,28 @@ body {
     background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
 	background-size: 400% 400%;
 	animation: gradient 15s ease infinite;
+    color: white;
+}
+
+.gradient-border {
+    --borderWidth: 3px;
+    background: #1D1F20;
+    position: relative;
+    border-radius: var(--borderWidth);
+}
+
+.gradient-border:after {
+    content: '';
+    position: absolute;
+    top: calc(-1 * var(--borderWidth));
+    left: calc(-1 * var(--borderWidth));
+    height: calc(100% + var(--borderWidth) * 2);
+    width: calc(100% + var(--borderWidth) * 2);
+    background: linear-gradient(60deg, #f79533, #f37055, #ef4e7b, #a166ab, #5073b8, #1098ad, #07b39b, #6fba82);
+    border-radius: calc(2 * var(--borderWidth));
+    z-index: -1;
+    animation: animatedgradient 3s ease alternate infinite;
+    background-size: 300% 300%;
 }
 
 
@@ -205,6 +264,18 @@ body {
   }
 
   @keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+@keyframes animatedgradient {
 	0% {
 		background-position: 0% 50%;
 	}

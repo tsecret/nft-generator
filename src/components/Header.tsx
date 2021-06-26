@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Button } from 'antd';
+import utils from '../utils';
 
 export const Header = () => {
     const [wallet, setWallet] = React.useState<string>();
@@ -25,14 +26,14 @@ export const Header = () => {
 
     return (
         <div className="row header-container">
-            <a className="link logo" href="/">NFT-GENERATOR</a>
+            <a className="link logo" href="/">🍋 NFT</a>
 
             <a className="link" href="/marketplace">Market Place</a>
             <a className="link" href="/mynfts">My Items</a>
             <a className="link" href="/generate">Generate NFT</a>
 
             {wallet? 
-            <span className="wallet-connected gradient">...{wallet.slice(wallet.length-10)}</span>
+            <span className="wallet-connected gradient">{utils.stripAddress(wallet)}</span>
             :
             <Button className="" onClick={onConnectWallet}>Connect wallet</Button>
             }

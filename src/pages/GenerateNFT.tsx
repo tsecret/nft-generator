@@ -30,7 +30,7 @@ export const GenerateNFT = () => {
 
     const onTextChange = (event: any) => {
         let {name, value} = event.target;
-        if (['price', 'amount'].includes(name)) value = parseInt(value);
+        if (['price', 'amount'].includes(name)) value = parseFloat(value);
         setInfo({ ...info, [name]: value || null })
     }
 
@@ -72,6 +72,17 @@ export const GenerateNFT = () => {
         if (imageURL) await firebase.removeImage(imageURL);
         if (info && info.id) await firebase.removeDocument(info.id);
     }
+
+    const onApprove = async () => {
+        const balance: any = await contract.approveMax(localStorage.wallet, localStorage.wallet, (err: any, txHash: string) => {
+            console.log(err, txHash);
+        })
+    }
+
+    const onBalance = async () => {
+        const balance: any = await contract.balanceOf(localStorage.wallet);
+        console.log(balance);
+    }
     
     const renderer = () => {
         if(generated){
@@ -100,7 +111,9 @@ export const GenerateNFT = () => {
 
                     <Input name="price" onChange={onTextChange} placeholder="Price" className="input" />  
 
-                    <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.price)} className="button button-generate">Generate</Button>
+                    <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.price)} className="button gradient">Generate</Button>
+                    <Button onClick={onBalance} className="button gradient">Balance</Button>
+                    <Button onClick={onApprove} className="button gradient">Approve</Button>
                 </div>
             </>
         }
