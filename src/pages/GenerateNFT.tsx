@@ -66,8 +66,8 @@ export const GenerateNFT = () => {
         Contract.buy(3, localStorage.wallet, ()=>{console.log("ok")});
    } 
    const price_nft = async () => {
-        let new_price = new BigNumber(2).times(18);
-        console.log(toBN(1));
+        // let new_price = new BigNumber(2).times(18);
+        // console.log(toBN(1));
         //Contract.update_price(3, localStorage.wallet, 0.5, ()=>{console.log("ok")});;
         let price_nft = await Contract.price(4);
         console.log('nft price ', price_nft);} 
