@@ -4,6 +4,7 @@ import { Upload, Input, Button } from 'antd';
 import firebase from '../firebase';
 import { Header, LoadingModal, NFTGenerationResult } from '../components';
 import { nanoid } from 'nanoid'
+import Lemon_nft from '../contracts/lemon_nft'
 
 export const GenerateNFT = () => {
 
@@ -14,6 +15,7 @@ export const GenerateNFT = () => {
     const [imageID, setImageID] = React.useState<string>();
     const [info, setInfo] = React.useState<any>();
     const [generated, setGenerated] = React.useState<boolean>(false);
+    const Contract = new Lemon_nft('0x98a682fE1B3967eFe70834dABf1E67527a993F5C');
 
     const onUpload = async (options: any) => {
         setUploading(true);
@@ -51,6 +53,9 @@ export const GenerateNFT = () => {
         .then((res: any) => { console.log("ok") })
         .catch((error: any) => { console.error(error) })
     }
+    const MINTING = async () => {
+        Contract.mint('test.html//png.kz', localStorage.wallet, 2, ()=>{console.log("ok")});
+    }
 
     const renderer = () => {
         if(generated){
@@ -84,6 +89,7 @@ export const GenerateNFT = () => {
                     </div>
 
                     <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.amount && info.price)} className="button button-generate">Generate</Button>
+                    <Button onClick={MINTING}  className="button button-generate">Minting</Button>
                 </div>
             </>
         }
