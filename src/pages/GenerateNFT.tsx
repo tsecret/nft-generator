@@ -4,7 +4,7 @@ import { Upload, Input, Button } from 'antd';
 import firebase from '../firebase';
 import { Header, LoadingModal, NFTGenerationResult } from '../components';
 import { BigNumber } from 'bignumber.js';
-import { toBN } from 'web3-utils';
+import { toWei,toBN } from 'web3-utils';
 import { nanoid } from 'nanoid';
 import Lemon_nft from '../contracts/lemon_nft';
 
@@ -68,7 +68,7 @@ export const GenerateNFT = () => {
    const price_nft = async () => {
         // let new_price = new BigNumber(2).times(18);
         // console.log(toBN(1));
-        //Contract.update_price(3, localStorage.wallet, 0.5, ()=>{console.log("ok")});;
+        Contract.update_price(3, localStorage.wallet, 0.5, ()=>{console.log("ok")});;
         let price_nft = await Contract.price(4);
         console.log('nft price ', price_nft);} 
 

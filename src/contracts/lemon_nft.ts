@@ -91,8 +91,9 @@ export class Lemon_nft {
 		}, callback);
 	}
 
-	async update_price(tokenID:number, sender: string, new_price:number, callback: any) {
-		let weiAmount: any = new BigNumber(new_price).times(18);
+	async update_price(tokenID:number, sender: string, new_price:any, callback: any) {
+		const prec: any = new BigNumber(10).pow(new BigNumber(18));
+		let weiAmount: any = new BigNumber(new_price).times(prec);
 		var gasPrice = await this.gasPrice();
 		var tx = this.contract.methods.updatePrice(tokenID, toBN(weiAmount));
 		let gasLimit = 150000;
