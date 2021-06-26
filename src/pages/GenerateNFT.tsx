@@ -91,7 +91,7 @@ export const GenerateNFT = () => {
                         beforeUpload={beforeUpload}
                         showUploadList={false}
                     >
-                        {imageURL? <img src={imageURL} alt="nft" style={{ width: '100%' }} /> : <span>Upload NFT</span> }
+                        {imageURL? <img src={imageURL} alt="nft" style={{ maxWidth: "100%", maxHeight: "100%" }} /> : <span>Upload NFT</span> }
                     </Upload>
 
 
@@ -100,7 +100,7 @@ export const GenerateNFT = () => {
 
                     <Input name="price" onChange={onTextChange} placeholder="Price" className="input" />  
 
-                    <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.amount && info.price)} className="button button-generate">Generate</Button>
+                    <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.price)} className="button button-generate">Generate</Button>
                 </div>
             </>
         }

@@ -62,7 +62,8 @@ export const NFT = () => {
                 <span>{NFT.name}</span>
                 <span>{NFT.description}</span>
                 <span>{NFT.price}</span>
-                <Button onClick={onBuy} className="button">Buy</Button>
+                
+                {NFT.owner !== localStorage.wallet && <Button onClick={onBuy} className="button">Buy</Button>}
             </div>
         } else {
             return <span>Loading</span>;
