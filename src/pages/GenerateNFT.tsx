@@ -35,6 +35,9 @@ export const GenerateNFT = () => {
     }
 
     const onGenerate = async () => {
+
+        // ! Add onFailure
+
         if(!file || !info || !localStorage.wallet || !imageURL) return setError("Error occured, please reload the page");
 
         setGenerating(true);
@@ -43,22 +46,30 @@ export const GenerateNFT = () => {
         const url: string = await firebase.uploadImage(file, imageID)
         .then((imageURL: string) => imageURL);
 
+        const docID: string|void = await firebase.addDocument({ ...info, url: url, owner: localStorage.wallet })
+        .then((doc: any) => doc.id)
+        .catch((error: any) => { console.log(error); setGenerating(false) })
+
+        if (!docID) return;
+
+        const JSONURL: string = `https://firestore.googleapis.com/v1/projects/nft-generator/databases/(default)/documents/NFTs/${docID}`;
+
         const { txHash, NFTID }: any = await new Promise((resolve, reject) => {
-            contract.mint(url, localStorage.wallet, info.price, function(err: any, txHash: string, NFTID: number) {
-                if(err) { onFailure(); setError("Error with minting"); reject() }
+            contract.mint(JSONURL, localStorage.wallet, info.price, function(err: any, txHash: string, NFTID: number) {
+                if(err) { onFailure(); setError("Error while minting"); reject() }
+                setInfo({ ...info, id: NFTID })
                 resolve({txHash, NFTID});
             })
         })
-        
-        await firebase.addDocument("NFTs", { ...info, url: url, owner: localStorage.wallet, txHash, id: NFTID })
-        .then((res: any) => { setGenerating(false); setGenerated(true) })
+
+        await firebase.updateDocument(docID, { txHash, id: NFTID })
+        .then(() => { setGenerating(false); setGenerated(true) })
         .catch((error: any) => { console.log(error); setGenerating(false) })
-
-
     }
 
     const onFailure = async () => {
-
+        if (imageURL) await firebase.removeImage(imageURL);
+        if (info && info.id) await firebase.removeDocument(info.id);
     }
     
     const renderer = () => {

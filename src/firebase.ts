@@ -4,6 +4,8 @@ import { NFTData } from './types';
 
 if(firebase.apps.length ===0) firebase.initializeApp(config.FIREBASE_CONFIG);
 
+const db: any = firebase.firestore().collection("NFTs");
+
 const uploadImage = async (file: any, imageID: string) => {
     const ref: any = firebase.storage().ref().child(`NFTs/${imageID}.png`);
     await ref.put(file);
@@ -14,16 +16,24 @@ const removeImage = async (imageID: string) => {
     return await firebase.storage().ref().child(`NFTs/${imageID}.png`).delete()
 }
 
-const addDocument = async (collectionName: string, data: NFTData) => {
-    return await firebase.firestore().collection(collectionName).doc(data.id).set(data)
+const addDocument = async (data: NFTData) => {
+    return await db.add(data);
+}
+
+const removeDocument = async (docID: string) => {
+    return await db.doc(docID).delete();
+}
+
+const updateDocument = async (docID: string, data: object) => {
+    return await db.doc(docID).update(data);
 }
 
 const getMyNFTs = async (address: string) => {
-    return await firebase.firestore().collection("NFTs").where("owner", "==", address).get()
+    return await db.where("owner", "==", address).get()
 }
 
 const getAllNFT = async () => {
-    return await firebase.firestore().collection("NFTs").get()
+    return await db.get()
 }
 
 export default {
@@ -31,6 +41,8 @@ export default {
     uploadImage,
     removeImage,
     addDocument,
+    removeDocument,
+    updateDocument,
     getMyNFTs,
     getAllNFT
 }
