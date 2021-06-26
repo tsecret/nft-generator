@@ -4,6 +4,13 @@ const getDocsFromSnapshot = (snapshot: any) => {
     return items;
 }
 
+const getBase64 = (img: any, callback: any) => {
+    const reader = new FileReader();
+    reader.addEventListener('load', () => callback(reader.result));
+    reader.readAsDataURL(img);
+}
+
 export default {
-    getDocsFromSnapshot
+    getDocsFromSnapshot,
+    getBase64
 }

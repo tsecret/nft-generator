@@ -2,7 +2,7 @@ import React from 'react';
 import Lottie from 'react-lottie';
 import animationData from '../assets/spinner.json';
 
-export const LoadingModal = () => {
+export const LoadingModal = ({text}: any) => {
 
 
     const defaultOptions = {
@@ -21,7 +21,7 @@ export const LoadingModal = () => {
                 height={200}
                 width={200}
             />
-            <span style={{ margin: 50 }}>Generating NFT...</span>
+            <span style={{ margin: 50 }}>{text}</span>
         </div>
     )
 }
