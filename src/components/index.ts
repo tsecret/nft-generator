@@ -1,11 +1,11 @@
 import Header from './Header';
 import LoadingModal from './LoadingModal';
-import LoadingResult from './LoadingResult';
+import NFTGenerationResult from './NFTGenerationResult';
 import NFTCard from './NFTCard';
 
 export {
     Header,
     LoadingModal,
-    LoadingResult,
+    NFTGenerationResult,
     NFTCard,
 }

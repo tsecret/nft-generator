@@ -1,8 +1,8 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Redirect } from "react-router-dom";
 
 
 
-import { GenerateNFT, MarketPlace, MyNFTs, NFT, Home } from './pages'; 
+import { GenerateNFT, MarketPlace, MyNFTs, NFT } from './pages'; 
 
 
 
@@ -11,7 +11,7 @@ const App = () => {
 
   return <Router>
         <Switch>
-          <Route exact path="/" component={Home} />
+          <Redirect exact from="/" to="/marketplace" />
           <Route exact path="/generate" component={GenerateNFT} />
           <Route exact path="/marketplace" component={MarketPlace} />
           <Route exact path="/mynfts" component={MyNFTs} />

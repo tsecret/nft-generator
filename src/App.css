@@ -108,8 +108,7 @@ body {
 .wallet-connected{
     border-radius: 8px;
     padding: 5px;
-    color: white;
-    text-align: center;
+    color: white
 }
 
 .error{
@@ -135,8 +134,7 @@ body {
 }
 
 .nft-card{
-    display: flex;
-    flex-direction: column;
+    cursor: pointer;
     justify-content: space-between;
     margin: 20px;
     box-shadow: 2px 2px 50px 0px rgba(0,0,0,0.76);
@@ -156,7 +154,6 @@ body {
 .nft-card-image{
     border-radius: 8px;
     width: 100%;
-    cursor: pointer;
 }
 
 .nft-card-name{
@@ -181,25 +178,6 @@ body {
     font-size: 18px;
 }
 
-.button-buy{
-    padding: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    height: 30px;
-    line-height: 5px;
-}
-
-.brand{
-    font-size: 48px;
-    margin: 100px 0px 30px 0px;
-}
-
-.text{
-    text-align: center;
-    font-size: 24px;
-    margin: 10px 0px;
-}
-
 /* Animation */
 
 .slide-top {
@@ -221,8 +199,7 @@ body {
 
 .gradient-border {
     --borderWidth: 3px;
-    background: white;
-    color: black;
+    background: #1D1F20;
     position: relative;
     border-radius: var(--borderWidth);
 }
