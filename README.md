@@ -3,8 +3,8 @@
 For the correct interraction with blockchain you will need to set up Metamask account and connect it to **Smart Chain - Testnet**. ([Here](https://academy.binance.com/en/articles/connecting-metamask-to-binance-smart-chain) are the instructions)
 
 
-[Link](https://testnet.bscscan.com/token/0x6a3426b2fa5d78897265a6a84779d769f78e8044) for Lemon token transaction monitoring
-[Link](https://testnet.bscscan.com/token/0x4bcd9df21071f57be6ae37e230b2d627c18ee69e) Lemon NFT contract explorer
+- [Link](https://testnet.bscscan.com/token/0x6a3426b2fa5d78897265a6a84779d769f78e8044) for Lemon token transaction monitoring
+- [Link](https://testnet.bscscan.com/token/0x4bcd9df21071f57be6ae37e230b2d627c18ee69e) Lemon NFT contract explorer
 
 # Getting Started with Create React App
 
