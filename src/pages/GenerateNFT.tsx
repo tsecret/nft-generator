@@ -18,8 +18,10 @@ export const GenerateNFT = () => {
     const [generated, setGenerated] = React.useState<boolean>(false);
     const [file, setFile] = React.useState<any>();
     
-    const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS_w_l));
-    const [token] = React.useState(new LemonToken(config.TOKEN_CONTRACT));
+    const [imageURL, setImageURL] = React.useState<string>();
+    const [imageID, setImageID] = React.useState<string>();
+
+    const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS));
 
     const beforeUpload = (file:any) => {
         setFile(file);
@@ -74,23 +76,6 @@ export const GenerateNFT = () => {
         if (info && info.id) await firebase.removeDocument(info.id);
     }
 
-    const onApprove = async () => {
-        console.log(await isApproved(localStorage.wallet))
-    }
-
-
-    const onBalance = async () => {
-        const balance: any = await token.balanceOf(localStorage.wallet);
-        console.log(balance);
-    }
-        
-    const approve = async () => {
-        token.approveMax(localStorage.wallet, config.CONTRACT_ADDRESS_w_l, (err: any, txHash: string) => {
-            console.log(err, txHash);
-        });
-    }
-
-
     const renderer = () => {
         if(generated){
             return <NFTGenerationResult status="success" url={imageURL} />
@@ -119,9 +104,6 @@ export const GenerateNFT = () => {
                     <Input name="price" onChange={onTextChange} placeholder="Price" className="input" />  
 
                     <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.price)} className="button gradient">Generate</Button>
-                    <Button onClick={onBalance} className="button gradient">Balance</Button>
-                    <Button onClick={approve} className="button gradient">Approve</Button>
-
                 </div>
             </>
         }
