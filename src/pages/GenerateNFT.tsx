@@ -113,6 +113,7 @@ export const GenerateNFT = () => {
                     <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.price)} className="button gradient">Generate</Button>
                     <Button onClick={onBalance} className="button gradient">Balance</Button>
                     <Button onClick={onApprove} className="button gradient">Approve</Button>
+
                 </div>
             </>
         }
