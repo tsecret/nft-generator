@@ -48,10 +48,16 @@ export class Lemon_token {
 	// 	let balance = await this.contract.methods.balanceOf(user).call();
 	// 	return this.fromBN(balance);
 	// }
+
+	// async balanceOf(sender: string) {
+	// 	let balance =  await this.contract.methods.balanceOf(sender).call();
+	// 	return this.fromBN(balance);
+	
+	// }
+
 	async balanceOf(sender: string) {
 		let balance =  await this.contract.methods.balanceOf(sender).call();
-		return this.fromBN(balance);
-		// return this.fromBN(new BigNumber(balance).div(this.stakePrecision));
+		//return this.fromBN(new BigNumber(balance).div(18));
 	}
 
 	async getSymbol() {

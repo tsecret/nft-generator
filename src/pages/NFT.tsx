@@ -7,13 +7,14 @@ import firebase from '../firebase';
 import utils from '../utils'
 import config from '../config';
 
-import Lemon from '../contracts/lemon';
+// import Lemon from '../contracts/lemon';
+import Lemon from '../contracts/nft_w_lemon';
 
 import { NFTData } from '../types';
 
 export const NFT = () => {
     const [NFT, setNFT] = React.useState<NFTData>();
-    const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS));
+    const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS_w_l));
     const [buying, setBuying] = React.useState<boolean>(false);
     const [complete, setComplete] = React.useState<boolean>(false);
     
@@ -30,10 +31,12 @@ export const NFT = () => {
         setNFT(NFT);
     }
 
+    console.log(contract.price(2));
     // ! Error handling
     const onBuy = async () => {
         if(!localStorage.wallet || !NFT) return;
         
+
         setBuying(true);
         const txHash: any = await new Promise((resolve, reject) => {
             contract.buy(NFT.id, localStorage.wallet, (err: any, txHash: string) => {
@@ -50,6 +53,9 @@ export const NFT = () => {
 
         setBuying(false);
     }
+
+
+
 
     const renderer = () => {
         if(complete){

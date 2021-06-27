@@ -38,9 +38,10 @@ export class Lemon {
 		return await this.contract.methods.totalSupply().call();
 	}
 
-	async price(tokenID: string) {
+	async price(tokenID: any) {
 		return await this.contract.methods.price(tokenID).call();
 	}
+
 
 	async listedMap(tokenID: number) {
 		return await this.contract.methods.listedMap(tokenID).call();
