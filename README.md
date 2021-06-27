@@ -1,5 +1,7 @@
 # [Demo](https://nft-generator.web.app/)
 
+For the correct interraction with blockchain you will need to set up Metamask account and connect it to **Smart Chain - Testnet**. ([Here](https://academy.binance.com/en/articles/connecting-metamask-to-binance-smart-chain) are the instructions)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
