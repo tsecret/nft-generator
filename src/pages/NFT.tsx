@@ -2,7 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import { Button, Divider } from 'antd';
-import { Header, NFTGenerationResult, LoadingModal } from '../components';
+import { Header, LoadingResult, LoadingModal } from '../components';
 import firebase from '../firebase';
 import utils from '../utils'
 import config from '../config';
@@ -59,7 +59,7 @@ export const NFT = () => {
 
     const renderer = () => {
         if(complete){
-            return <NFTGenerationResult status="success"/>;
+            return <LoadingResult type="buying" text="Transaction complete!" status="success"/>;
         } else if(buying) {
             return <LoadingModal text="Transaction pending..." /> 
         } else if (NFT) {
@@ -69,11 +69,11 @@ export const NFT = () => {
                 <span className="nft-card-description">{NFT.description? NFT.description : "No description"}</span>
                 <Divider />
                 <span className="nft-card-price nft-card-price-big">NFT ID: <strong>{NFT.id}</strong></span>
-                <span className="nft-card-price nft-card-price-big">Creator: <strong>{utils.stripAddress(NFT.creator)}</strong></span>
-                <span className="nft-card-price nft-card-price-big">Owner: <strong>{utils.stripAddress(NFT.owner)}</strong></span>
+                <span className="nft-card-price nft-card-price-big">Creator: <strong>{utils.stripAddress(NFT.creator)}{NFT.creator === localStorage.wallet && " (You)"}</strong></span>
+                <span className="nft-card-price nft-card-price-big">Owner: <strong>{utils.stripAddress(NFT.owner)}{NFT.owner === localStorage.wallet && " (You)"}</strong></span>
                 <span className="nft-card-price nft-card-price-big">Price: <strong>{NFT.price} BNB</strong></span>
-                <Divider />
-                {NFT.owner !== localStorage.wallet && <Button onClick={onBuy} className="button gradient">Buy</Button>}
+                
+                {NFT.owner !== localStorage.wallet && <Divider /> && <Button onClick={onBuy} className="button gradient">Buy</Button>}
             </div>
         } else {
             return <span>Loading</span>;

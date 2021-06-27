@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Upload, Input, Button } from 'antd';
 import firebase from '../firebase';
-import { Header, LoadingModal, NFTGenerationResult } from '../components';
+import { Header, LoadingModal, LoadingResult } from '../components';
 import { nanoid } from 'nanoid'
 import utils from '../utils';
 import config from '../config';
@@ -11,15 +11,23 @@ import { Lemon, LemonToken, isApproved } from '../contracts';
 
 export const GenerateNFT = () => {
 
-    const [generating, setGenerating] = React.useState<boolean>(false);
     const [error, setError] = React.useState<string>();
-    const [imageURL, setImageURL] = React.useState<string>();
-    const [info, setInfo] = React.useState<any>();
+
+    const [generating, setGenerating] = React.useState<boolean>(false);
     const [generated, setGenerated] = React.useState<boolean>(false);
+
+    const [info, setInfo] = React.useState<any>();
     const [file, setFile] = React.useState<any>();
     
+<<<<<<< Updated upstream
     const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS_w_l));
     const [token] = React.useState(new LemonToken(config.TOKEN_CONTRACT));
+=======
+    const [imageURL, setImageURL] = React.useState<string>();
+    const [imageID, setImageID] = React.useState<string>();
+
+    const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS));
+>>>>>>> Stashed changes
 
     const beforeUpload = (file:any) => {
         setFile(file);
@@ -36,21 +44,21 @@ export const GenerateNFT = () => {
     }
 
     const onGenerate = async () => {
-
-        // ! Add onFailure
-
         if(!file || !info || !localStorage.wallet || !imageURL) return setError("Error occured, please reload the page");
 
         setGenerating(true);
 
         const imageID: string = nanoid();
-        const url: string = await firebase.uploadImage(file, imageID)
-        .then((imageURL: string) => { setImageURL(imageURL); return imageURL });
         
+        const url: string|void = await firebase.uploadImage(file, imageID)
+        .then((imageURL: string) => { setImageURL(imageURL); setImageID(imageID); return imageURL })
+        .catch((error: any) => { setGenerating(false); setError("Error while uploading document"); console.error(error); onFailure() })
+        
+        if(!url) return;
 
         const docID: string|void = await firebase.addDocument({ ...info, url: url, owner: localStorage.wallet, creator: localStorage.wallet })
-        .then((doc: any) => doc.id)
-        .catch((error: any) => { console.log(error); setGenerating(false) })
+        .then((doc: any) => { setInfo({ ...info, docID: doc.id }); return doc.id })
+        .catch((error: any) => { setGenerating(false); setError("Error while working with database"); console.error(error); onFailure() })
 
         if (!docID) return;
 
@@ -58,7 +66,7 @@ export const GenerateNFT = () => {
 
         const { txHash, NFTID }: any = await new Promise((resolve, reject) => {
             contract.mint(JSONURL, localStorage.wallet, info.price, function(err: any, txHash: string, NFTID: number) {
-                if(err) { onFailure(); setError("Error while minting"); reject() }
+                if(err) { setGenerating(false); setError("Error while minting"); console.error(error); onFailure(); reject() }
                 setInfo({ ...info, id: NFTID })
                 resolve({txHash, NFTID});
             })
@@ -66,13 +74,14 @@ export const GenerateNFT = () => {
 
         await firebase.updateDocument(docID, { txHash, id: NFTID, docID })
         .then(() => { setGenerating(false); setGenerated(true) })
-        .catch((error: any) => { console.log(error); setGenerating(false) })
+        .catch((error: any) => { setGenerating(false); setError("Error while updating database"); console.error(error); onFailure() });
     }
 
     const onFailure = async () => {
-        if (imageURL) await firebase.removeImage(imageURL);
+        if (imageID) await firebase.removeImage(imageID);
         if (info && info.id) await firebase.removeDocument(info.id);
     }
+<<<<<<< Updated upstream
 
     const onApprove = async () => {
         console.log(await isApproved(localStorage.wallet))
@@ -91,9 +100,14 @@ export const GenerateNFT = () => {
     }
 
 
+=======
+    
+>>>>>>> Stashed changes
     const renderer = () => {
-        if(generated){
-            return <NFTGenerationResult status="success" url={imageURL} />
+        if(error){
+            return <LoadingResult type="error" text={error} status="error" />
+        } else if(generated){
+            return <LoadingResult type="generation" text="Your NFT is ready!" status="success" url={imageURL} />
         } else if(generating){
             return <LoadingModal text="Generating NFT..." />
         } else {
@@ -119,9 +133,12 @@ export const GenerateNFT = () => {
                     <Input name="price" onChange={onTextChange} placeholder="Price" className="input" />  
 
                     <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.price)} className="button gradient">Generate</Button>
+<<<<<<< Updated upstream
                     <Button onClick={onBalance} className="button gradient">Balance</Button>
                     <Button onClick={approve} className="button gradient">Approve</Button>
 
+=======
+>>>>>>> Stashed changes
                 </div>
             </>
         }

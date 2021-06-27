@@ -20,10 +20,24 @@ const isApproved = async (wallet: string) => {
 
 }
 
+const connectWallet = async () => {
+    const currentWindow: any = window;
+    const accounts = await currentWindow.ethereum.request({ method: 'eth_requestAccounts' });
+    localStorage.setItem('wallet', accounts[0]);
+    return accounts[0];
+}
+
+const checkWalletAccounts = async () => {
+    const currentWindow: any = window;
+    const accounts = await currentWindow.ethereum.request({ method: 'eth_accounts' });
+    if(accounts[0]) { localStorage.setItem('wallet', accounts[0]); return accounts[0] }
+}
 
 export {
     Lemon,
     LemonToken,
     NFT_W_L,
-    isApproved
+    isApproved,
+    connectWallet,
+    checkWalletAccounts
 }

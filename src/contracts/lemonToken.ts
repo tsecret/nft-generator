@@ -69,6 +69,7 @@ export class LemonToken {
 	async allowance(sender: string, spender: string) {
 		try{
 			const allowedBalance: any = await this.contract.methods.allowance(sender, spender).call();
+			console.log(allowedBalance);
 			return allowedBalance;
 		}catch(err){
 			return false;
