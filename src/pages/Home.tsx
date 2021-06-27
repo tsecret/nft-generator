@@ -1,20 +1,27 @@
 import React from 'react';
 
 import { Button } from 'antd';
-import { connectWallet, checkWalletAccounts } from '../contracts';
+import { connectWallet, checkWalletAccounts, approve } from '../contracts';
 import utils from '../utils';
 
 export const Home = () => {
     const [wallet, setWallet] = React.useState<string>();
+    const [approved, setApproved] = React.useState<boolean>(false);
 
     const init = async () => {
         setWallet(await checkWalletAccounts())
+    }
+
+    const onApprove = async () => {
+        const txHash: string|void|unknown = await approve();
+        if(txHash) setApproved(true);
     }
 
     const renderButtons = () => {
         if(wallet){
             return <>
             <span style={{ width: "100%" }} className="wallet-connected gradient-border">{utils.stripAddress(wallet)}</span>
+            <Button className="button gradient" onClick={onApprove}>{approved? "Approved" : "Approve"}</Button>
             <Button className="button gradient" href="/marketplace">View Market Place</Button>
             </>
         } else {

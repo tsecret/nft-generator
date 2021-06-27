@@ -1,11 +1,10 @@
 import Lemon from './lemon';
 import LemonToken from './lemonToken';
-import NFT_W_L from './NFT_W_L';
 
 import config from '../config';
 
-const contract: any = new Lemon(config.CONTRACT_ADDRESS);
-const token: any = new LemonToken(config.TOKEN_CONTRACT)
+const contract: any = new Lemon(config.CONTRACT_ADDRESS_W_L);
+const token: any = new LemonToken(config.TOKEN_CONTRACT);
 
 const isApproved = async (wallet: string) => {
     const allowed: any = await token.allowance(localStorage.wallet, config.CONTRACT_ADDRESS);
@@ -33,11 +32,18 @@ const checkWalletAccounts = async () => {
     if(accounts[0]) { localStorage.setItem('wallet', accounts[0]); return accounts[0] }
 }
 
+const approve = async () => {
+    return await new Promise((resolve, reject) => token.approveMax(localStorage.wallet, config.CONTRACT_ADDRESS_W_L, (err: any, txHash: string) => {
+        if(err) {console.error(err); return reject() }
+        resolve(txHash);
+    }));
+}
+
 export {
-    Lemon,
-    LemonToken,
-    NFT_W_L,
+    contract,
+    token,
     isApproved,
     connectWallet,
-    checkWalletAccounts
+    checkWalletAccounts,
+    approve
 }

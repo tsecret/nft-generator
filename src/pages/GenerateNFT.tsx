@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid'
 import utils from '../utils';
 import config from '../config';
 
-import { Lemon, LemonToken, isApproved } from '../contracts';
+import { contract } from '../contracts';
 
 export const GenerateNFT = () => {
 
@@ -19,15 +19,8 @@ export const GenerateNFT = () => {
     const [info, setInfo] = React.useState<any>();
     const [file, setFile] = React.useState<any>();
     
-<<<<<<< Updated upstream
-    const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS_w_l));
-    const [token] = React.useState(new LemonToken(config.TOKEN_CONTRACT));
-=======
     const [imageURL, setImageURL] = React.useState<string>();
     const [imageID, setImageID] = React.useState<string>();
-
-    const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS));
->>>>>>> Stashed changes
 
     const beforeUpload = (file:any) => {
         setFile(file);
@@ -52,57 +45,35 @@ export const GenerateNFT = () => {
         
         const url: string|void = await firebase.uploadImage(file, imageID)
         .then((imageURL: string) => { setImageURL(imageURL); setImageID(imageID); return imageURL })
-        .catch((error: any) => { setGenerating(false); setError("Error while uploading document"); console.error(error); onFailure() })
+        .catch(async (error: any) => { setGenerating(false); setError("Error while uploading document"); console.error(error); await onFailure(imageID, null) })
         
         if(!url) return;
 
         const docID: string|void = await firebase.addDocument({ ...info, url: url, owner: localStorage.wallet, creator: localStorage.wallet })
         .then((doc: any) => { setInfo({ ...info, docID: doc.id }); return doc.id })
-        .catch((error: any) => { setGenerating(false); setError("Error while working with database"); console.error(error); onFailure() })
+        .catch(async (error: any) => { setGenerating(false); setError("Error while working with database"); console.error(error); await onFailure(imageID, docID) })
 
         if (!docID) return;
 
         const JSONURL: string = `https://firestore.googleapis.com/v1/projects/nft-generator/databases/(default)/documents/NFTs/${docID}`;
+            
+        contract.mint(JSONURL, localStorage.wallet, info.price, async (err: any, txHash: string, NFTID: number) => {
+            if(err) { setGenerating(false); setError("Error while minting"); console.error(error); await onFailure(imageID, docID) }
 
-        const { txHash, NFTID }: any = await new Promise((resolve, reject) => {
-            contract.mint(JSONURL, localStorage.wallet, info.price, function(err: any, txHash: string, NFTID: number) {
-                if(err) { setGenerating(false); setError("Error while minting"); console.error(error); onFailure(); reject() }
-                setInfo({ ...info, id: NFTID })
-                resolve({txHash, NFTID});
-            })
+            setInfo({ ...info, id: NFTID });
+            await firebase.updateDocument(docID, { txHash, id: NFTID, docID })
+            .then(() => { setGenerating(false); setGenerated(true) })
+            .catch(async (error: any) => { setGenerating(false); setError("Error while updating database"); console.error(error); await onFailure(imageID, docID) });
         })
-
-        await firebase.updateDocument(docID, { txHash, id: NFTID, docID })
-        .then(() => { setGenerating(false); setGenerated(true) })
-        .catch((error: any) => { setGenerating(false); setError("Error while updating database"); console.error(error); onFailure() });
+       
     }
 
-    const onFailure = async () => {
+    const onFailure = async (imageID: string|null, docID: string|null|void) => {
         if (imageID) await firebase.removeImage(imageID);
-        if (info && info.id) await firebase.removeDocument(info.id);
-    }
-<<<<<<< Updated upstream
-
-    const onApprove = async () => {
-        console.log(await isApproved(localStorage.wallet))
+        if (docID) await firebase.removeDocument(docID);
     }
 
-
-    const onBalance = async () => {
-        const balance: any = await token.balanceOf(localStorage.wallet);
-        console.log(balance);
-    }
-        
-    const approve = async () => {
-        token.approveMax(localStorage.wallet, config.CONTRACT_ADDRESS_w_l, (err: any, txHash: string) => {
-            console.log(err, txHash);
-        });
-    }
-
-
-=======
     
->>>>>>> Stashed changes
     const renderer = () => {
         if(error){
             return <LoadingResult type="error" text={error} status="error" />
@@ -133,12 +104,6 @@ export const GenerateNFT = () => {
                     <Input name="price" onChange={onTextChange} placeholder="Price" className="input" />  
 
                     <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.price)} className="button gradient">Generate</Button>
-<<<<<<< Updated upstream
-                    <Button onClick={onBalance} className="button gradient">Balance</Button>
-                    <Button onClick={approve} className="button gradient">Approve</Button>
-
-=======
->>>>>>> Stashed changes
                 </div>
             </>
         }

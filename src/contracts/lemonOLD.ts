@@ -1,8 +1,9 @@
 import Web3 from 'web3'
-import { toBN } from 'web3-utils'
+import { toBN } from 'web3-utils';
 import { BigNumber } from 'bignumber.js'
+import BN from 'bn.js';
 
-import LNFT_ABI from './NFT_W_L.json';
+import LNFT_ABI from './lemon.json';
 
 BigNumber.set({ DECIMAL_PLACES: 18 })
 
@@ -13,21 +14,26 @@ export class Lemon {
     defaultGasPrice: number;
     currentWindow: any = window
     LNFTABI: any = LNFT_ABI
+	symbol: string|null;
     
 	constructor(address: string) {
 		this.web3 = new Web3(this.currentWindow.ethereum);
 		this.address = address;
 		this.contract = new this.web3.eth.Contract(this.LNFTABI, address);
 		this.defaultGasPrice = 20000000000;
-
+		this.symbol = null;
 	}
 
 	fromBN(amount: any){
-		return amount.c[0]
+		return amount.c[0];
 	}
 
 	setProvider(provider: any) {
 		this.web3.setProvider(provider)
+	}
+
+	async getSymbol() {
+		return this.symbol || await this.contract.methods.symbol().call();
 	}
 
 	async gasPrice() {
@@ -42,7 +48,7 @@ export class Lemon {
 		return await this.contract.methods.price(tokenID).call();
 	}
 
-	async listedMap(tokenID: number) {
+	async listedMap(tokenID: string) {
 		return await this.contract.methods.listedMap(tokenID).call();
 	}
 
@@ -69,7 +75,7 @@ export class Lemon {
 	async buy(tokenID:string, sender: string, callback: any) {
 		const price: any = await this.price(tokenID);
 		const gasPrice = await this.gasPrice();
-		const tx = this.contract.methods.buy_for_lemon(tokenID, price);
+		const tx = this.contract.methods.buy(tokenID);
 		let gasLimit = 150000;
 		try {
 			gasLimit = await tx.estimateGas({ value: 0, from: sender, to: this.address });
@@ -78,6 +84,7 @@ export class Lemon {
 		}
 		return tx.send({
 			from: sender,
+			value: price,
 			gasPrice: gasPrice,
 			gas: Math.round(gasLimit * 1.1)
 		}, callback);
@@ -116,6 +123,43 @@ export class Lemon {
 			gas: Math.round(gasLimit * 1.1)
 		}, callback);
 	}
+
+	async balanceOf(address: string) {
+		const balance = await this.contract.methods.balanceOf(address).call();
+		return balance;
+	}
+
+	async approveMax(sender: string, spender: string, callback: any) {
+		const gasPrice = await this.web3.eth.getGasPrice();
+		const tx = this.contract.methods.approve(spender, new BN('2').pow(new BN('256')).sub(new BN('1')));
+		const gasLimit = await tx.estimateGas({ value: 0, from: sender, to: this.address });
+		return tx.send({
+			from: sender,
+			gasPrice: gasPrice,
+			gas: Math.round(gasLimit * 1.1)
+		}, callback);
+	}
+
+	async approveTest(sender: string, spender: string, callback: any) {
+		const gasPrice = this.defaultGasPrice;
+		const tx = this.contract.methods.approve(spender, 0);
+		const gasLimit = 90000;//await tx.estimateGas({ value: 0, from: sender, to: this.address });
+		const transaction = {
+			value: "0",
+			from: sender,
+			to: this.address,
+			gasPrice: gasPrice.toString(),
+			gas: Math.round(gasLimit * 1.1).toString(),
+			data: tx.encodeABI()
+		};
+		console.log("transaction=", transaction);
+		return this.web3.eth.sendTransaction(transaction, (error, hash) => {
+			console.log("inner error", error)
+			console.log("inner hash", hash)
+			callback(error, hash)
+		})
+		}
+
 }
 
 export default Lemon;

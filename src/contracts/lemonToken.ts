@@ -42,13 +42,8 @@ export class LemonToken {
 		return await this.contract.methods.totalSupply().call();
 	}
 
-	// async balanceOf(sender: string) {
-	// 	let balance =  await this.contract.methods.balanceOf(sender).call();
-	// 	return this.fromBN(balance);
-	// }
 	async balanceOf(sender: string) {
 		return await this.contract.methods.balanceOf(sender).call();
-
 	}
 
 	async getSymbol() {

@@ -20,10 +20,10 @@ export const NFTCard = ({ data }: any) => {
             </>
 
             {isMine()?
-            (<span className="nft-card-price">{data.price} BNB</span>)
+            (<span className="nft-card-price">{data.price} 🍋</span>)
             :
             (<div className="row" style={{ justifyContent: "space-evenly" }}> 
-                <span className="nft-card-price">{data.price} BNB</span>
+                <span className="nft-card-price">{data.price} 🍋</span>
                 <Button type="text" href={`/nft/${data.docID}`} className="button-buy gradient-border">Buy</Button>
             </div>)
             }

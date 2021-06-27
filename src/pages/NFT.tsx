@@ -5,52 +5,41 @@ import { Button, Divider } from 'antd';
 import { Header, LoadingResult, LoadingModal } from '../components';
 import firebase from '../firebase';
 import utils from '../utils'
-import config from '../config';
 
-// import Lemon from '../contracts/lemon';
-import Lemon from '../contracts/nft_w_lemon';
+import { contract } from '../contracts';
 
 import { NFTData } from '../types';
 
 export const NFT = () => {
-    const [NFT, setNFT] = React.useState<NFTData>();
-    const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS_w_l));
     const [buying, setBuying] = React.useState<boolean>(false);
     const [complete, setComplete] = React.useState<boolean>(false);
     
+    const [error, setError] = React.useState<string>();
+    const [NFT, setNFT] = React.useState<NFTData>();
 
     const { id }: any = useParams();
 
-    // ! Error handling
     const init = async () => {
         const NFT: NFTData|undefined = await firebase.getDocument(id)
         .then((doc: any) => doc.data())
-        .catch((error: any) => { console.log(error) });
+        .catch((error: any) => { setError("Error while loading NFT data"); console.error(error) });
 
         if(!NFT) return;
         setNFT(NFT);
     }
 
-    console.log(contract.price(2));
     // ! Error handling
     const onBuy = async () => {
         if(!localStorage.wallet || !NFT) return;
         
-
         setBuying(true);
-        const txHash: any = await new Promise((resolve, reject) => {
-            contract.buy(NFT.id, localStorage.wallet, (err: any, txHash: string) => {
-                if(err) { setBuying(false); return reject() };
-                resolve(txHash);
-            })
+        contract.buy(NFT.id, localStorage.wallet, async (err: any, txHash: string) => {
+            if(err) { console.log(err); setBuying(false); return }
+
+            await firebase.updateDocument(id, { owner: localStorage.wallet })
+            .then(() => { setComplete(true) })
+            .catch((error: any) => { setBuying(false); console.error(error); setError("Database error") })
         })
-
-        if(!txHash) return; 
-
-        await firebase.updateDocument(id, { owner: localStorage.wallet })
-        .then(() => { setComplete(true) })
-        .catch((error: any) => { console.log(error); })
-
         setBuying(false);
     }
 
@@ -58,7 +47,9 @@ export const NFT = () => {
 
 
     const renderer = () => {
-        if(complete){
+        if(error){
+            <LoadingResult type="error" text={error} status="error"/>;
+        } else if(complete){
             return <LoadingResult type="buying" text="Transaction complete!" status="success"/>;
         } else if(buying) {
             return <LoadingModal text="Transaction pending..." /> 
