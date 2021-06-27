@@ -2,17 +2,26 @@ import React from 'react';
 
 import { Button } from 'antd';
 import utils from '../utils';
-import { connectWallet, checkWalletAccounts } from '../contracts';
 
 export const Header = () => {
     const [wallet, setWallet] = React.useState<string>();
 
-    const init = async () => {
-        setWallet(await checkWalletAccounts())
+    const currentWindow: any = window;
+
+    const onConnectWallet = async () => {
+        const accounts = await currentWindow.ethereum.request({ method: 'eth_requestAccounts' });
+        setWallet(accounts[0]);
+        localStorage.setItem('wallet', accounts[0]);
+    }
+
+    const checkAccounts = async () => {
+        const accounts = await currentWindow.ethereum.request({ method: 'eth_accounts' });
+        setWallet(accounts[0]);
+        if(accounts[0]) localStorage.setItem('wallet', accounts[0]);
     }
 
     React.useEffect(() => {
-        init()
+        checkAccounts()
     }, [])
 
     return (
@@ -26,7 +35,7 @@ export const Header = () => {
             {wallet? 
             <span className="wallet-connected gradient">{utils.stripAddress(wallet)}</span>
             :
-            <Button className="" onClick={async () => { setWallet(await connectWallet()) }}>Connect wallet</Button>
+            <Button className="" onClick={onConnectWallet}>Connect wallet</Button>
             }
         </div>
     )
