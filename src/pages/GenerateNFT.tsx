@@ -7,7 +7,7 @@ import { nanoid } from 'nanoid'
 import utils from '../utils';
 import config from '../config';
 
-import Lemon from '../contracts/lemon';
+import { Lemon, LemonToken, isApproved } from '../contracts';
 
 export const GenerateNFT = () => {
 
@@ -19,6 +19,7 @@ export const GenerateNFT = () => {
     const [file, setFile] = React.useState<any>();
     
     const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS));
+    const [token] = React.useState(new LemonToken(config.TOKEN_CONTRACT));
 
     const beforeUpload = (file:any) => {
         setFile(file);
@@ -74,9 +75,7 @@ export const GenerateNFT = () => {
     }
 
     const onApprove = async () => {
-        const balance: any = await contract.approveMax(localStorage.wallet, localStorage.wallet, (err: any, txHash: string) => {
-            console.log(err, txHash);
-        })
+        console.log(await isApproved(localStorage.wallet))
     }
 
     const onBalance = async () => {
