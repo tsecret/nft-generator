@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 
-import { Button } from 'antd';
+import { Button, Divider } from 'antd';
 import { Header, NFTGenerationResult, LoadingModal } from '../components';
 import firebase from '../firebase';
 import utils from '../utils'
@@ -57,13 +57,17 @@ export const NFT = () => {
         } else if(buying) {
             return <LoadingModal text="Transaction pending..." /> 
         } else if (NFT) {
-            return <div className="container">
-                <img src={NFT.url} alt="nft" />
-                <span>{NFT.name}</span>
-                <span>{NFT.description}</span>
-                <span>{NFT.price}</span>
-                
-                {NFT.owner !== localStorage.wallet && <Button onClick={onBuy} className="button">Buy</Button>}
+            return <div className="container nft-card nft-card-big">
+                <img src={NFT.url} className="nft-card-image nft-card-image-big" alt="nft" />
+                <span className="nft-card-name nft-card-name-big">{NFT.name}</span>
+                <span className="nft-card-description">{NFT.description? NFT.description : "No description"}</span>
+                <Divider />
+                <span className="nft-card-price nft-card-price-big">NFT ID: <strong>{NFT.id}</strong></span>
+                <span className="nft-card-price nft-card-price-big">Creator: <strong>{utils.stripAddress(NFT.creator)}</strong></span>
+                <span className="nft-card-price nft-card-price-big">Owner: <strong>{utils.stripAddress(NFT.owner)}</strong></span>
+                <span className="nft-card-price nft-card-price-big">Price: <strong>{NFT.price} BNB</strong></span>
+                <Divider />
+                {NFT.owner !== localStorage.wallet && <Button onClick={onBuy} className="button gradient">Buy</Button>}
             </div>
         } else {
             return <span>Loading</span>;

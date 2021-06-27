@@ -7,8 +7,7 @@ import { nanoid } from 'nanoid'
 import utils from '../utils';
 import config from '../config';
 
-import Lemon from '../contracts/lemon';
-import Lemon_token from '../contracts/lemon_token';
+import { Lemon, LemonToken, isApproved } from '../contracts';
 
 export const GenerateNFT = () => {
 
@@ -20,7 +19,7 @@ export const GenerateNFT = () => {
     const [file, setFile] = React.useState<any>();
     
     const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS));
-    const [Token] = React.useState(new Lemon_token(config.TOKEN_CONTRACT));
+    const [token] = React.useState(new LemonToken(config.TOKEN_CONTRACT));
 
     const beforeUpload = (file:any) => {
         setFile(file);
@@ -32,7 +31,7 @@ export const GenerateNFT = () => {
 
     const onTextChange = (event: any) => {
         let {name, value} = event.target;
-        if (['price', 'amount'].includes(name)) value = parseInt(value);
+        if (['price', 'amount'].includes(name)) value = parseFloat(value);
         setInfo({ ...info, [name]: value || null })
     }
 
@@ -74,12 +73,16 @@ export const GenerateNFT = () => {
         if (imageURL) await firebase.removeImage(imageURL);
         if (info && info.id) await firebase.removeDocument(info.id);
     }
+
+    const onApprove = async () => {
+        console.log(await isApproved(localStorage.wallet))
+    }
+
+    const onBalance = async () => {
+        const balance: any = await contract.balanceOf(localStorage.wallet);
+        console.log(balance);
+    }
     
-    // const approve = async () => {
-    //     Token.approveMax(localStorage.wallet, config.CONTRACT_ADDRESS, $);
-    // }
-
-
     const renderer = () => {
         if(generated){
             return <NFTGenerationResult status="success" url={imageURL} />
@@ -107,9 +110,9 @@ export const GenerateNFT = () => {
 
                     <Input name="price" onChange={onTextChange} placeholder="Price" className="input" />  
 
-                    <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.price)} className="button button-generate">Generate</Button>
-
-                   
+                    <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.price)} className="button gradient">Generate</Button>
+                    <Button onClick={onBalance} className="button gradient">Balance</Button>
+                    <Button onClick={onApprove} className="button gradient">Approve</Button>
 
                 </div>
             </>

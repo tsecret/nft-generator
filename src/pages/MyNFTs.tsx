@@ -1,6 +1,7 @@
 import React from 'react';
 import { NFTData } from '../types';
 
+import { Empty } from 'antd';
 import firebase from '../firebase';
 import utils from '../utils';
 import { Header, NFTCard, LoadingModal } from '../components';
@@ -19,20 +20,27 @@ export const MyNFTs = () => {
         setNFTs(NFTs);
     }
 
+    const renderer = () => {
+        if(NFTs && NFTs.length === 0) {
+            return <Empty style={{ margin: 50 }} />
+        } else if (NFTs){
+            return <div className="nft-grid">
+            {NFTs?.map((NFT: NFTData) => <NFTCard key={NFT.url} data={NFT} />)}
+            </div>
+        }
+    }
+
     React.useEffect(() => {
         init()
     }, [])
+
 
 
     return (
         <div className="page">
             <Header />
             <span className="header">My NFTs</span>
-
-            <div className="nft-grid">
-                {NFTs?.map((NFT: NFTData) => <NFTCard key={NFT.url} data={NFT} />)}
-            </div>
-                
+            {renderer()}
         </div>
     )
 }

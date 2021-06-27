@@ -3,7 +3,9 @@ export interface NFTData {
     url: string,
     name: string,
     description: string,
-    amount: number,
     price: number,
-    owner: string
+    owner: string,
+    creator: string,
+    txHash: string,
+    docID: string
 }
