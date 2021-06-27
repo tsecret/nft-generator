@@ -19,15 +19,10 @@ export const GenerateNFT = () => {
     const [info, setInfo] = React.useState<any>();
     const [file, setFile] = React.useState<any>();
     
-<<<<<<< Updated upstream
-    const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS_w_l));
-    const [token] = React.useState(new LemonToken(config.TOKEN_CONTRACT));
-=======
     const [imageURL, setImageURL] = React.useState<string>();
     const [imageID, setImageID] = React.useState<string>();
 
     const [contract] = React.useState(new Lemon(config.CONTRACT_ADDRESS));
->>>>>>> Stashed changes
 
     const beforeUpload = (file:any) => {
         setFile(file);
@@ -81,28 +76,7 @@ export const GenerateNFT = () => {
         if (imageID) await firebase.removeImage(imageID);
         if (info && info.id) await firebase.removeDocument(info.id);
     }
-<<<<<<< Updated upstream
-
-    const onApprove = async () => {
-        console.log(await isApproved(localStorage.wallet))
-    }
-
-
-    const onBalance = async () => {
-        const balance: any = await token.balanceOf(localStorage.wallet);
-        console.log(balance);
-    }
-        
-    const approve = async () => {
-        token.approveMax(localStorage.wallet, config.CONTRACT_ADDRESS_w_l, (err: any, txHash: string) => {
-            console.log(err, txHash);
-        });
-    }
-
-
-=======
     
->>>>>>> Stashed changes
     const renderer = () => {
         if(error){
             return <LoadingResult type="error" text={error} status="error" />
@@ -133,12 +107,6 @@ export const GenerateNFT = () => {
                     <Input name="price" onChange={onTextChange} placeholder="Price" className="input" />  
 
                     <Button onClick={onGenerate} disabled={!(info && info.name && info.description && info.price)} className="button gradient">Generate</Button>
-<<<<<<< Updated upstream
-                    <Button onClick={onBalance} className="button gradient">Balance</Button>
-                    <Button onClick={approve} className="button gradient">Approve</Button>
-
-=======
->>>>>>> Stashed changes
                 </div>
             </>
         }
