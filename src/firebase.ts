@@ -4,16 +4,16 @@ import { NFTData } from './types';
 
 if(firebase.apps.length ===0) firebase.initializeApp(config.FIREBASE_CONFIG);
 
-const db: any = firebase.firestore().collection("NFTs");
+const db: any = firebase.firestore().collection(config.COLLECTION_NAME);
 
 const uploadImage = async (file: any, imageID: string) => {
-    const ref: any = firebase.storage().ref().child(`NFTs/${imageID}.png`);
+    const ref: any = firebase.storage().ref().child(`${config.COLLECTION_NAME}/${imageID}.${config.IMAGE_EXTENTION}`);
     await ref.put(file);
     return await ref.getDownloadURL().then((downloadURL: string) => downloadURL);
 }
 
 const removeImage = async (imageID: string) => {
-    return await firebase.storage().ref().child(`NFTs/${imageID}.png`).delete()
+    return await firebase.storage().ref().child(`${config.COLLECTION_NAME}/${imageID}.${config.IMAGE_EXTENTION}`).delete()
 }
 
 const addDocument = async (data: NFTData) => {

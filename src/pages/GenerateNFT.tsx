@@ -58,7 +58,7 @@ export const GenerateNFT = () => {
         const JSONURL: string = `https://firestore.googleapis.com/v1/projects/nft-generator/databases/(default)/documents/NFTs/${docID}`;
             
         contract.mint(JSONURL, localStorage.wallet, info.price, async (err: any, txHash: string, NFTID: number) => {
-            if(err) { setGenerating(false); setError("Error while minting"); console.error(error); await onFailure(imageID, docID) }
+            if(err) { setGenerating(false); setError("Error while minting"); console.error(error); await onFailure(imageID, docID); return }
 
             setInfo({ ...info, id: NFTID });
             await firebase.updateDocument(docID, { txHash, id: NFTID, docID })
