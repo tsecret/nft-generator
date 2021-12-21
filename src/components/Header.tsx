@@ -17,7 +17,7 @@ export const Header = () => {
 
     return (
         <div className="row header-container">
-            <a className="link logo" href="/">🍋 NFT</a>
+            <a className="link logo" href="/">🍋 <strong>NFT</strong></a>
 
             <a className="link" href="/marketplace">Market Place</a>
             <a className="link" href="/mynfts">My Items</a>

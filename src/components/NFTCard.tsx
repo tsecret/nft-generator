@@ -5,6 +5,8 @@ import { Button } from 'antd';
 
 export const NFTCard = ({ data }: any) => {
     const [hovered, setHovered] = React.useState<boolean>(false);
+    const [loaded, setLoaded] = React.useState<boolean>(false);
+    const [imageStyle, setImageStyle] = React.useState<any>({display: "none"});
 
     const isMine = () => {
         return localStorage.wallet === data.owner;
@@ -13,9 +15,14 @@ export const NFTCard = ({ data }: any) => {
     const history = useHistory();
 
     return (
-        <div onClick={() => history.push(`/nft/${data.docID}`)} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} className={`nft-card ${hovered? "slide-top" : "slide-bottom"}`}>
+        <div
+            onClick={() => history.push(`/nft/${data.docID}`)}
+            onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+            className={`nft-card ${hovered? "slide-top" : "slide-bottom"}`}
+        >
             <>
-            <img src={data.url} alt="nft" className="nft-card-image" />
+            {!loaded && <div className="nft-card-image-skeleton gradient" />}
+            <img src={data.url} alt="nft" className="nft-card-image"  onLoad={() => {setLoaded(true); setImageStyle({})}} style={imageStyle} />
             <span className="nft-card-name">{data.name}</span>
             </>
 
