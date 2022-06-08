@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Button } from 'antd';
 
@@ -12,11 +12,11 @@ export const NFTCard = ({ data }: any) => {
         return localStorage.wallet === data.owner;
     }
 
-    const history = useHistory();
+    const navigate = useNavigate();
 
     return (
         <div
-            onClick={() => history.push(`/nft/${data.docID}`)}
+            onClick={() => navigate(`/nft/${data.docID}`)}
             onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
             className={`nft-card ${hovered? "slide-top" : "slide-bottom"}`}
         >

@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 
 
@@ -10,13 +10,13 @@ const App = () => {
   
 
   return <Router>
-        <Switch>
-          <Route exact path="/" component={Home} />
-          <Route exact path="/generate" component={GenerateNFT} />
-          <Route exact path="/marketplace" component={MarketPlace} />
-          <Route exact path="/mynfts" component={MyNFTs} />
-          <Route exact path="/nft/:id" component={NFT} />
-        </Switch>
+        <Routes>
+          <Route path="/" element={ <Home /> } />
+          <Route path="/generate" element={ <GenerateNFT /> } />
+          <Route path="/marketplace" element={ <MarketPlace /> } />
+          <Route path="/mynfts" element={ <MyNFTs /> } />
+          <Route path="/nft/:id" element={ <NFT /> } />
+        </Routes>
   </Router>
 }
 

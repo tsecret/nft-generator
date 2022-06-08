@@ -1,3 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .google-btn {
+        @apply btn w-48
+    }
+}
+
 body {
     margin: 0;
     font-family: 'Noto Sans', sans-serif;

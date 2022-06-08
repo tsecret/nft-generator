@@ -5,7 +5,6 @@ import firebase from '../firebase';
 import { Header, LoadingModal, LoadingResult } from '../components';
 import { nanoid } from 'nanoid'
 import utils from '../utils';
-import config from '../config';
 
 import { contract } from '../contracts';
 
